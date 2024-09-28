@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Cadastrar Categoria" />
     <admin-layout>
         <div class="card">
@@ -21,9 +22,11 @@
                         <div class="form-group col-md-12">
                             <label for="description">Descrição</label>
                             <input type="text" class="form-control" id="description" v-model="form.description">
-                            <span v-if="form.errors.description" class="text-danger">{{ form.errors.description }}</span>
+                            <span v-if="form.errors.description" class="text-danger">{{ form.errors.description
+                                }}</span>
                         </div>
                     </div>
+                    <button type="button" class="btn btn-default mt-3 mr-2" @click="back">Voltar</button>
                     <button type="submit" class="btn btn-primary mt-3" :disabled="form.processing">Salvar</button>
                 </form>
             </div>
@@ -37,24 +40,12 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { watch } from 'vue';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
-
+import { generateSlug, back } from '@/Components/Utils.js';
 const form = useForm({
     name: '',
     slug: '',
     description: ''
 });
-
-function generateSlug(text) {
-    return text
-        .toString()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, '-')
-        .replace(/[^\w-]+/g, '')
-        .replace(/--+/g, '-');
-}
 
 watch(() => form.name, (newValue) => {
     form.slug = generateSlug(newValue);
@@ -72,6 +63,4 @@ function store() {
 
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
