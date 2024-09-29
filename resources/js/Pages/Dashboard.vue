@@ -35,10 +35,10 @@
             <div class="col-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Cadastros de Categorias por Mês</h3>
+                        <h3 class="card-title">Cadastros de Posts por Mês</h3>
                     </div>
                     <div class="card-body">
-                        <canvas ref="chartRefCategory"></canvas>
+                        <canvas ref="chartRefPostMonth"></canvas>
                     </div>
                 </div>
             </div>
@@ -64,24 +64,24 @@ import Chart from 'chart.js/dist/Chart.min.js';
 
 const props = defineProps({
     categories: Number,
-    categoryData: Array,
     posts: Number,
     postData: Array,
     postsByCategoryData: Object,
+    postMonthData: Array,
 });
 
-const chartRefCategory = ref(null);
 const chartRefPostsByCategory = ref(null);
+const chartRefPostMonth = ref(null);
 
 onMounted(() => {
-    const ctxCategory = chartRefCategory.value.getContext('2d');
-    new Chart(ctxCategory, {
+    const ctxPostMonth = chartRefPostMonth.value.getContext('2d');
+    new Chart(ctxPostMonth, {
         type: 'bar',
         data: {
             labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
             datasets: [{
-                label: 'Cadastros de Categorias por Mês',
-                data: props.categoryData,
+                label: 'Cadastros de Posts por Mês',
+                data: props.postMonthData,
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1

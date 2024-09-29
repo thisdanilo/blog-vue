@@ -16,7 +16,7 @@ class DashboardController extends Controller
 
         $posts = Post::count();
 
-        $categoryData = Category::select(
+        $postMonthData = Post::select(
             DB::raw('EXTRACT(MONTH FROM created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
@@ -27,7 +27,7 @@ class DashboardController extends Controller
         ->pluck('count', 'month')
         ->toArray();
 
-        $monthlyDataCategory = array_replace(array_fill(1, 12, 0), $categoryData);
+        $monthlyDataPostCount = array_replace(array_fill(1, 12, 0), $postMonthData);
 
         $postData = Post::select(
             DB::raw('EXTRACT(MONTH FROM created_at) as month'),
@@ -49,10 +49,10 @@ class DashboardController extends Controller
 
         return inertia('Dashboard', [
             'categories' => $categories,
-            'categoryData' => array_values($monthlyDataCategory),
             'posts' => $posts,
             'postData' => array_values($monthlyDataPost),
             'postsByCategoryData' => $postsByCategoryData,
+            'postMonthData' => array_values($monthlyDataPostCount),
         ]);
     }
 }
