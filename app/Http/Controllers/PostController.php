@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
+use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 class PostController extends Controller
 {
@@ -22,17 +23,8 @@ class PostController extends Controller
         return inertia('Posts/Create', compact('categories'));
     }
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
-            'content' => 'required|string',
-            'status' => 'required|boolean',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
         $user = auth()->user();
 
         $data = $request->except('image');
@@ -83,16 +75,8 @@ class PostController extends Controller
         ]);
     }
 
-    public function update(Request $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
-            'content' => 'required|string',
-            'status' => 'required|boolean',
-            'category_id' => 'required|exists:categories,id',
-        ]);
-
         $post->update([
             'title' => $request->title,
             'slug' => $request->slug,
@@ -107,7 +91,7 @@ class PostController extends Controller
     public function delete(Post $post)
     {
         Storage::delete($post->image);
-        
+
         $post->delete();
 
         return redirect()->back();

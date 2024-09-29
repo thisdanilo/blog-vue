@@ -134,9 +134,6 @@ function store() {
             document.getElementById('image').value = '';
             toastr.success('Post criado com sucesso!');
         },
-        onError: () => {
-            toastr.error('Erro ao criar post!');
-        }
     });
 }
 
