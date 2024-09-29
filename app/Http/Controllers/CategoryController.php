@@ -36,6 +36,27 @@ class CategoryController extends Controller
         ]);
 
         return redirect()->back();
+    }   
+
+    public function edit(Category $category)
+    {
+        return inertia('Categories/Edit', compact('category'));
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255'
+        ]);
+
+        $category->update([
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('categories.edit', $category->id);
     }
 
     public function delete(Category $category)

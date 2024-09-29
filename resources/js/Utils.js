@@ -9,7 +9,3 @@ export function generateSlug(text) {
         .replace(/[^\w-]+/g, '')
         .replace(/--+/g, '-');
 }
-
-export function back() {
-    window.history.back();
-}

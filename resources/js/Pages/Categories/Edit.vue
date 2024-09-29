@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Cadastrar Categoria" />
+    <Head title="Editar Categoria" />
     <admin-layout>
         <section class="content-header">
             <div class="container-fluid">
@@ -13,7 +13,7 @@
                             <li class="breadcrumb-item">
                                 <Link :href="route('dashboard')">Dashboard</Link>
                             </li>
-                            <li class="breadcrumb-item active">Cadastrar</li>
+                            <li class="breadcrumb-item active">Editar</li>
                         </ol>
                     </div>
                 </div>
@@ -21,10 +21,10 @@
         </section>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Adicionar Categoria</h3>
+                <h3 class="card-title">Editar Categoria</h3>
             </div>
             <div class="card-body">
-                <form @submit.prevent="store">
+                <form @submit.prevent="update">
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="name">Nome</label>
@@ -59,22 +59,25 @@ import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 import { generateSlug } from '@/Utils.js';
 
+const props = defineProps({
+    category: Object
+});
+
 const form = useForm({
-    name: '',
-    slug: '',
-    description: ''
+    name: props.category.name,
+    slug: props.category.slug,
+    description: props.category.description
 });
 
 watch(() => form.name, (newValue) => {
     form.slug = generateSlug(newValue);
 });
 
-function store() {
-    form.post(route('categories.store'), {
+function update() {
+    form.put(route('categories.update', props.category.id), {
         preserveScroll: true,
         onSuccess: () => {
-            form.reset();
-            toastr.success('Categoria criada com sucesso!');
+            toastr.success('Categoria atualizada com sucesso!');
         },
     });
 }

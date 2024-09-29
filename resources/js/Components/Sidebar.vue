@@ -31,7 +31,8 @@
                     <li class="nav-item">
                         <Link :href="route('categories.index')" :class="['nav-link', {
                             active: $page.component === 'Categories/Index' ||
-                                $page.component === 'Categories/Create'
+                                $page.component === 'Categories/Create' ||
+                                $page.component === 'Categories/Edit'
                         }]">
                         <i class="nav-icon fas fa-list"></i>
                         <p>

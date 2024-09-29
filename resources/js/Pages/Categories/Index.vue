@@ -13,7 +13,7 @@
                             <li class="breadcrumb-item">
                                 <Link :href="route('dashboard')">Dashboard</Link>
                             </li>
-                            <li class="breadcrumb-item active">Categorias</li>
+                            <li class="breadcrumb-item active">Listagem</li>
                         </ol>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                                             <td>{{ category.slug }}</td>
                                             <td>{{ category.description }}</td>
                                             <td class="d-flex justify-content-end">
-                                                <Link href="" class="btn btn-warning btn-sm">
+                                                <Link :href="route('categories.edit', category.id)" class="btn btn-warning btn-sm">
                                                 <i class="fas fa-edit"></i>
                                                 </Link>
                                                 <button @click="openDeleteModal(category)"
