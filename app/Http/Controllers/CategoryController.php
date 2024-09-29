@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use inertia;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -19,13 +20,8 @@ class CategoryController extends Controller
         return inertia('Categories/Create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255'
-        ]);
-
         $user = auth()->user();
 
         Category::create([
@@ -43,13 +39,8 @@ class CategoryController extends Controller
         return inertia('Categories/Edit', compact('category'));
     }
 
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255'
-        ]);
-
         $category->update([
             'name' => $request->name,
             'slug' => $request->slug,
