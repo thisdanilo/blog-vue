@@ -2,32 +2,36 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\FilterByUser;
 use App\Models\User;
+use App\Models\Category;
+use App\Models\Scopes\FilterByUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 
 #[ScopedBy([FilterByUser::class])]
-class Category extends Model
+class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name',
+        'title',
+        'image',
         'slug',
-        'description',
-        'user_id',
+        'content',
+        'status',
+        'category_id',
+        'user_id'   
     ];
 
-    public function user()
+    public function category()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Category::class);
     }
 
-    public function posts()
+    public function user()  
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsTo(User::class);
     }
 }

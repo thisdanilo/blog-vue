@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -27,6 +28,15 @@ Route::group(['prefix' => 'categories', 'middleware' => ['auth', 'verified']], f
     Route::get('/edit/{category}', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/update/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/delete/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
+});
+
+Route::group(['prefix' => 'posts', 'middleware' => ['auth', 'verified']], function () {
+    Route::get('/', [PostController::class, 'index'])->name('posts.index');
+    Route::get('/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('/store', [PostController::class, 'store'])->name('posts.store');
+    Route::get('/edit/{post}', [PostController::class, 'edit'])->name('posts.edit');
+    Route::put('/update/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('/delete/{post}', [PostController::class, 'delete'])->name('posts.delete');
 });
 
 Route::middleware('auth')->group(function () {

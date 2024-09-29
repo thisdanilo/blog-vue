@@ -40,6 +40,18 @@
                         </p>
                         </Link>
                     </li>
+                    <li class="nav-item">
+                        <Link :href="route('posts.index')" :class="['nav-link', {
+                            active: $page.component === 'Posts/Index' ||
+                                $page.component === 'Posts/Create' ||
+                                $page.component === 'Posts/Edit'
+                        }]">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>
+                            Posts
+                        </p>
+                        </Link>
+                    </li>
                 </ul>
             </nav>
         </div>
