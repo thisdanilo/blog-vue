@@ -36,6 +36,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Imagem</th>
                                             <th>Título</th>
                                             <th>Slug</th>
                                             <th>Categoria</th>
@@ -46,6 +47,11 @@
                                     <tbody>
                                         <tr v-for="post in posts" :key="post.id">
                                             <td>{{ post.id }}</td>
+                                            <td>
+                                                <img :src="getPostImage(post.image)" alt="Imagem do Post"
+                                                    class="img-fluid" width="80" height="80">
+
+                                            </td>
                                             <td>{{ post.title }}</td>
                                             <td>{{ post.slug }}</td>
                                             <td>{{ post.category.name }}</td>
@@ -116,6 +122,13 @@ const deletePost = () => {
         closeDeleteModal();
         toastr.success('Post deletado com sucesso');
     }
+};
+
+const getPostImage = (imagePath) => {
+    if (imagePath) {
+        return '../storage/' + imagePath;
+    }
+    return '../storage/default.jpg';
 };
 
 onMounted(() => {

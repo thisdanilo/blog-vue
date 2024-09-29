@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -29,17 +30,26 @@ class PostController extends Controller
             'content' => 'required|string',
             'status' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $user = auth()->user();
 
-        Post::create([
+        $data = $request->except('image');
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('posts', 'public');
+            $data['image'] = $path;
+        }
+
+        $post = Post::create([
             'title' => $request->title,
             'slug' => $request->slug,
             'content' => $request->content,
             'status' => $request->status,
             'category_id' => $request->category_id,
             'user_id' => $user->id,
+            'image' => $data['image'],
         ]);
 
         return redirect()->back();
@@ -96,6 +106,8 @@ class PostController extends Controller
 
     public function delete(Post $post)
     {
+        Storage::delete($post->image);
+        
         $post->delete();
 
         return redirect()->back();
