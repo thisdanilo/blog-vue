@@ -3,8 +3,7 @@
     <Head title="Dashboard" />
     <admin-layout>
         <div class="row mt-4">
-            <div class="col-lg-6 col-6">
-
+            <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>{{ categories }}</h3>
@@ -17,7 +16,7 @@
                         class="fas fa-arrow-circle-right"></i></Link>
                 </div>
             </div>
-            <div class="col-lg-6 col-6">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3>{{ posts }}</h3>
@@ -32,7 +31,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-6">
+            <div class="col-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Cadastros de Posts por Mês</h3>
@@ -42,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Posts por Categoria</h3>
