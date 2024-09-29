@@ -13,7 +13,7 @@
                     <div class="icon">
                         <i class="fa fa-list"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <Link :href="route('categories.index')" class="small-box-footer">Mais informações <i class="fas fa-arrow-circle-right"></i></Link>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import Chart from 'chart.js/dist/Chart.min.js';
 
@@ -65,8 +65,4 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.chart-container {
-    width: 80%;
-    margin: 20px auto;
-}
 </style>

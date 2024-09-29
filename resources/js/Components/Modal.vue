@@ -1,108 +1,69 @@
+<template>
+    <div class="modal fade" :class="{ 'show': show }" style="display: block; padding-right: 15px;" aria-modal="true"
+        role="dialog" v-if="show">
+        <div class="modal-dialog" :class="modalSize">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ title }}</h4>
+                    <button type="button" class="close" @click="$emit('close')" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <slot></slot>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" @click="$emit('close')">{{ cancelText }}</button>
+                    <button type="button" :class="confirmButtonClass" @click="$emit('confirm')">{{ confirmText }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
 <script setup>
-import { computed, onMounted, onUnmounted, watch } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
     show: {
         type: Boolean,
-        default: false,
+        default: false
     },
-    maxWidth: {
+    title: {
         type: String,
-        default: '2xl',
+        default: 'Modal Title'
     },
-    closeable: {
-        type: Boolean,
-        default: true,
+    size: {
+        type: String,
+        default: 'md',
+        validator: (value) => ['sm', 'md', 'lg'].includes(value)
     },
+    cancelText: {
+        type: String,
+        default: 'Cancelar'
+    },
+    confirmText: {
+        type: String,
+        default: 'Confirmar'
+    },
+    confirmButtonClass: {
+        type: String,
+        default: 'btn btn-primary'
+    }
 });
 
-const emit = defineEmits(['close']);
-
-watch(
-    () => props.show,
-    () => {
-        if (props.show) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = null;
-        }
-    },
-);
-
-const close = () => {
-    if (props.closeable) {
-        emit('close');
-    }
-};
-
-const closeOnEscape = (e) => {
-    if (e.key === 'Escape' && props.show) {
-        close();
-    }
-};
-
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
-
-onUnmounted(() => {
-    document.removeEventListener('keydown', closeOnEscape);
-    document.body.style.overflow = null;
-});
-
-const maxWidthClass = computed(() => {
+const modalSize = computed(() => {
     return {
-        sm: 'sm:max-w-sm',
-        md: 'sm:max-w-md',
-        lg: 'sm:max-w-lg',
-        xl: 'sm:max-w-xl',
-        '2xl': 'sm:max-w-2xl',
-    }[props.maxWidth];
+        'modal-sm': props.size === 'sm',
+        'modal-lg': props.size === 'lg'
+    };
 });
+
+defineEmits(['close', 'confirm']);
 </script>
 
-<template>
-    <Teleport to="body">
-        <Transition leave-active-class="duration-200">
-            <div
-                v-show="show"
-                class="fixed inset-0 z-50 overflow-y-auto px-4 py-6 sm:px-0"
-                scroll-region
-            >
-                <Transition
-                    enter-active-class="ease-out duration-300"
-                    enter-from-class="opacity-0"
-                    enter-to-class="opacity-100"
-                    leave-active-class="ease-in duration-200"
-                    leave-from-class="opacity-100"
-                    leave-to-class="opacity-0"
-                >
-                    <div
-                        v-show="show"
-                        class="fixed inset-0 transform transition-all"
-                        @click="close"
-                    >
-                        <div
-                            class="absolute inset-0 bg-gray-500 opacity-75"
-                        />
-                    </div>
-                </Transition>
-
-                <Transition
-                    enter-active-class="ease-out duration-300"
-                    enter-from-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    enter-to-class="opacity-100 translate-y-0 sm:scale-100"
-                    leave-active-class="ease-in duration-200"
-                    leave-from-class="opacity-100 translate-y-0 sm:scale-100"
-                    leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                >
-                    <div
-                        v-show="show"
-                        class="mb-6 transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:mx-auto sm:w-full"
-                        :class="maxWidthClass"
-                    >
-                        <slot v-if="show" />
-                    </div>
-                </Transition>
-            </div>
-        </Transition>
-    </Teleport>
-</template>
+<style scoped>
+.modal {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+</style>

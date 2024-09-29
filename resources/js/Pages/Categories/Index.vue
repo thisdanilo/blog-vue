@@ -39,7 +39,7 @@
                                             <th>Nome</th>
                                             <th>Slug</th>
                                             <th>Descrição</th>
-                                            <th>Ações</th>
+                                            <th width="100">Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -48,8 +48,14 @@
                                             <td>{{ category.name }}</td>
                                             <td>{{ category.slug }}</td>
                                             <td>{{ category.description }}</td>
-                                            <td>
-                                                <!-- Add action buttons here -->
+                                            <td class="d-flex justify-content-end">
+                                                <Link href="" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                                </Link>
+                                                <button @click="openDeleteModal(category)"
+                                                    class="btn btn-danger btn-sm ml-1">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -60,13 +66,23 @@
                 </div>
             </div>
         </section>
+
+        <Modal :show="showDeleteModal" title="Confirmar Exclusão" size="md" confirm-text="Excluir"
+            :confirm-button-class="'btn btn-danger'" @close="closeDeleteModal" @confirm="deleteCategory">
+            <p>Tem certeza que deseja excluir a categoria "{{ categoryToDelete?.name }}"?</p>
+        </Modal>
     </admin-layout>
+
 </template>
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
+import Modal from '@/Components/Modal.vue';
+import { router } from '@inertiajs/vue3';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 const props = defineProps({
     categories: Array,
@@ -74,12 +90,36 @@ const props = defineProps({
 
 const dataTable = ref(null);
 
+const showDeleteModal = ref(false);
+const categoryToDelete = ref(null);
+
+const openDeleteModal = (category) => {
+    categoryToDelete.value = category;
+    showDeleteModal.value = true;
+};
+
+const closeDeleteModal = () => {
+    showDeleteModal.value = false;
+    categoryToDelete.value = null;
+};
+
+const deleteCategory = () => {
+    if (categoryToDelete.value) {
+        router.delete(route('categories.delete', categoryToDelete.value.id));
+        closeDeleteModal();
+        toastr.success('Categoria deletada com sucesso');
+    }
+};
+
 onMounted(() => {
     if (props.categories && props.categories.length > 0) {
         $(dataTable.value).DataTable({
             responsive: true,
             lengthChange: true,
             autoWidth: false,
+            columnDefs: [
+                { orderable: false, targets: 4 }
+            ]
         });
     }
 });

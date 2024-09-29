@@ -41,6 +41,7 @@ import { watch } from 'vue';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 import { generateSlug, back } from '@/Components/Utils.js';
+
 const form = useForm({
     name: '',
     slug: '',
