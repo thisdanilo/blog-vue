@@ -38,7 +38,6 @@
                                             <th>ID</th>
                                             <th>Título</th>
                                             <th>Slug</th>
-                                            <th>Descrição</th>
                                             <th>Categoria</th>
                                             <th>Status</th>
                                             <th width="100">Ações</th>
@@ -49,7 +48,6 @@
                                             <td>{{ post.id }}</td>
                                             <td>{{ post.title }}</td>
                                             <td>{{ post.slug }}</td>
-                                            <td>{{ post.content }}</td>
                                             <td>{{ post.category.name }}</td>
                                             <td>
                                                 <span :class="['badge', post.status ? 'bg-success' : 'bg-danger']">

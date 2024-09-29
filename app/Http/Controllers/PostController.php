@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class PostController extends Controller
 {
@@ -47,7 +48,29 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::get();
-        return inertia('Posts/Edit', compact('post', 'categories'));
+        
+        $post->load(['category' => function ($query) {
+            $query->withTrashed();
+        }]);
+        
+        $categoriesForSelect = $categories->map(function ($category) {
+            return [
+                'id' => $category->id,
+                'name' => $category->name,
+            ];
+        });
+        
+        if ($post->category && $post->category->trashed() && !$categories->contains($post->category->id)) {
+            $categoriesForSelect->push([
+                'id' => $post->category->id,
+                'name' => $post->category->name . ' (Deletada)',
+            ]);
+        }
+        
+        return inertia('Posts/Edit', [
+            'post' => $post,
+            'categories' => $categoriesForSelect,
+        ]);
     }
 
     public function update(Request $request, Post $post)

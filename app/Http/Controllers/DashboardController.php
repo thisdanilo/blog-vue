@@ -43,6 +43,7 @@ class DashboardController extends Controller
         $monthlyDataPost = array_replace(array_fill(1, 12, 0), $postData);
 
         $postsByCategoryData = Category::withCount('posts')
+            ->withTrashed()
             ->get()
             ->pluck('posts_count', 'name')
             ->toArray();
