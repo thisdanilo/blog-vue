@@ -6,9 +6,17 @@ use inertia;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryRequest;
+use App\Services\Categories\CategoryServiceInterface;
 
 class CategoryController extends Controller
 {
+    protected $categoryService;
+
+    public function __construct(CategoryServiceInterface $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
     public function index()
     {
         $categories = Category::get();
@@ -22,14 +30,7 @@ class CategoryController extends Controller
 
     public function store(CategoryRequest $request)
     {
-        $user = auth()->user();
-
-        Category::create([
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'description' => $request->description,
-            'user_id' => $user->id,
-        ]);
+        $this->categoryService->updateOrCreate($request);
 
         return redirect()->back();
     }   
@@ -41,18 +42,14 @@ class CategoryController extends Controller
 
     public function update(CategoryRequest $request, Category $category)
     {
-        $category->update([
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'description' => $request->description,
-        ]);
+        $this->categoryService->updateOrCreate($request, $category);
 
         return redirect()->route('categories.edit', $category->id);
     }
 
     public function delete(Category $category)
     {
-        $category->delete();
+        $this->categoryService->delete($category);
         return redirect()->back();
     }
 }
