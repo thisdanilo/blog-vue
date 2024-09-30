@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Builder;
+use App\Services\Posts\PostServiceInterface;
 
 class PostController extends Controller
 {
+    protected $postService;
+
+    public function __construct(PostServiceInterface $postService)
+    {
+        $this->postService = $postService;
+    }
+
     public function index()
     {
         $posts = Post::with('category')->get();
@@ -25,24 +30,7 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
-        $user = auth()->user();
-
-        $data = $request->except('image');
-
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('posts', 'public');
-            $data['image'] = $path;
-        }
-
-        $post = Post::create([
-            'title' => $request->title,
-            'slug' => $request->slug,
-            'content' => $request->content,
-            'status' => $request->status,
-            'category_id' => $request->category_id,
-            'user_id' => $user->id,
-            'image' => $data['image'],
-        ]);
+        $this->postService->updateOrCreate($request);
 
         return redirect()->back();
     }
@@ -77,22 +65,14 @@ class PostController extends Controller
 
     public function update(PostRequest $request, Post $post)
     {
-        $post->update([
-            'title' => $request->title,
-            'slug' => $request->slug,
-            'content' => $request->content,
-            'status' => $request->status,
-            'category_id' => $request->category_id,
-        ]);
+        $this->postService->updateOrCreate($request, $post);
 
         return redirect()->route('posts.edit', $post->id);
     }
 
     public function delete(Post $post)
     {
-        Storage::delete($post->image);
-
-        $post->delete();
+        $this->postService->delete($post);
 
         return redirect()->back();
     }
