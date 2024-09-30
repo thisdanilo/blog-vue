@@ -22,7 +22,7 @@ class PostService implements PostServiceInterface
             $data['image'] = $path;
         }
 
-        $attributes = $post ? ['id' => $post->id] : [];
+        $attributes = $post ? ['id' => $post->id] : ['title' => $request->title];
         
         $values = [
             'title' => $request->title,
